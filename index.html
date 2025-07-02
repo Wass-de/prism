@@ -5,317 +5,352 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PRISM - Bien plus qu'une IA</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet" />
-<style>
-  :root {
-    --neon-purple: rgba(187, 134, 252, 0.8);
-    --neon-glow: 0 0 10px rgba(187, 134, 252, 0.8), 
-                 0 0 20px rgba(187, 134, 252, 0.6),
-                 0 0 30px rgba(187, 134, 252, 0.4);
-  }
-
-  body {
-    font-family: 'Montserrat', sans-serif;
-    margin: 0; padding: 0;
-    background-color: #0a0a0a;
-    color: white;
-    overflow-x: hidden;
-  }
-  body.no-scroll {
-    overflow: hidden;
-  }
-
-  .nav-transparent {
-    background-color: rgba(10,10,10,0.5);
-    backdrop-filter: blur(10px);
-    position: fixed;
-    width: 100%;
-    z-index: 1000;
-  }
-
-  .nav-item {
-    transition: all 0.3s ease;
-    position: relative;
-    cursor: pointer;
-  }
-  .nav-item::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 2px;
-    background: var(--neon-purple);
-    transition: width 0.3s ease;
-  }
-  .nav-item:hover::after {
-    width: 80%;
-  }
-
-  #mobile-menu-toggle {
-    cursor: pointer;
-    width: 30px;
-    height: 25px;
-    position: relative;
-    display: none; /* caché par défaut, affiché en mobile */
-    flex-direction: column;
-    justify-content: space-between;
-    z-index: 1100;
-  }
-  #mobile-menu-toggle span {
-    display: block;
-    height: 3px;
-    width: 100%;      /* Correction : largeur complète pour les barres */
-    background: white !important;
-    border-radius: 2px;
-    transition: all 0.3s ease;
-    z-index: 9999;
-  }
-  #mobile-menu-toggle.active #bar1 {
-    transform: translateY(11px) rotate(45deg);
-  }
-  #mobile-menu-toggle.active #bar2 {
-    opacity: 0;
-  }
-  #mobile-menu-toggle.active #bar3 {
-    transform: translateY(-11px) rotate(-45deg);
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 2rem;
-  }
-
-  .hero-section {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    padding: 0 5%;
-    padding-top: 80px;
-  }
-  .hero-content {
-    position: relative;
-    max-width: 600px;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 400px;
-    text-align: center;
-    margin-top: 80px; /* Remonté par rapport à 120px précédent */
-  }
-  .prism-title {
-    font-size: 6.5rem;
-    font-weight: 700;
-    color: white;
-    line-height: 1;
-    margin-bottom: 1rem;
-    text-shadow: 0 0 10px rgba(255,255,255,0.3);
-    white-space: nowrap;
-  }
-  .hero-subtitle {
-    font-size: 1.5rem;
-    font-weight: 300;
-    margin-bottom: 2rem;
-    opacity: 0.9;
-    max-width: 500px;
-  }
-
-  .neon-circle {
-    position: absolute;
-    top: 48%;  /* Remonté légèrement du centre (50% → 48%) */
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    height: 400px;
-    border-radius: 50%;
-    background: transparent;
-    box-shadow: var(--neon-glow);
-    animation: pulse-breath 4s infinite ease-in-out;
-    z-index: 1;
-  }
-  @keyframes pulse-breath {
-    0%, 100% {
-      opacity: 0.7;
-      transform: translate(-50%, -50%) scale(1);
+  <style>
+    :root {
+      --neon-purple: rgba(187, 134, 252, 0.8);
+      --neon-glow: 0 0 10px rgba(187, 134, 252, 0.8), 
+                   0 0 20px rgba(187, 134, 252, 0.6),
+                   0 0 30px rgba(187, 134, 252, 0.4);
     }
-    50% {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1.05);
+
+    /* Reset & base */
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0; padding: 0;
+      background-color: #0a0a0a;
+      color: white;
+      overflow-x: hidden;
     }
-  }
-
-  section {
-    min-height: calc(100vh - 80px);
-    padding: 60px 5% 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    scroll-snap-align: start;
-    flex-direction: column;
-    text-align: center;
-  }
-  .content-hidden {
-    opacity: 0;
-    transform: translateY(50px);
-    transition: all 0.8s ease;
-  }
-  .content-visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  section#project,
-  section#about,
-  section#contact {
-    background: linear-gradient(135deg, #0a0a0a 0%, #1e0d3f 100%);
-  }
-
-  .mobile-menu {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100vh;
-    background: rgba(10, 10, 10, 0.95);
-    backdrop-filter: blur(10px);
-    z-index: 1050;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    transform: translateY(-100%);
-    transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0);
-  }
-  .mobile-menu.active {
-    transform: translateY(0);
-  }
-  .mobile-menu a {
-    display: block;
-    font-size: 1.8rem;
-    padding: 1rem 0;
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s ease;
-    width: 100%;
-    max-width: 300px;
-  }
-  .mobile-menu a:hover {
-    color: var(--neon-purple);
-  }
-
-  .mobile-menu-close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    z-index: 1100;
-  }
-  .mobile-menu-close span {
-    position: absolute;
-    height: 3px;
-    width: 30px;
-    background: white;
-    top: 50%;
-    left: 0;
-    border-radius: 2px;
-    transition: all 0.3s ease;
-  }
-  .mobile-menu-close span:first-child {
-    transform: translateY(-50%) rotate(45deg);
-  }
-  .mobile-menu-close span:last-child {
-    transform: translateY(-50%) rotate(-45deg);
-  }
-
-  @media (max-width: 768px) {
-    .nav-links {
-      display: none;
+    body.no-scroll {
+      overflow: hidden;
     }
-    #mobile-menu-toggle {
+
+    /* Nav */
+    nav {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      background-color: rgba(10,10,10,0.5);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
       display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 5%;
+      box-sizing: border-box;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.8rem;
+      user-select: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
       position: relative;
-      z-index: 2000;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      cursor: pointer;
     }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: var(--neon-purple);
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover::after,
+    .nav-links a:focus::after {
+      width: 80%;
+    }
+
+    /* Menu burger */
+    #mobile-menu-toggle {
+      cursor: pointer;
+      width: 35px;
+      height: 30px;
+      display: none; /* affiché uniquement en mobile */
+      flex-direction: column;
+      justify-content: space-between;
+      background: transparent;
+      border: none;
+      padding: 0;
+      z-index: 1100;
+    }
+    #mobile-menu-toggle span {
+      display: block;
+      height: 4px;
+      width: 100%;
+      background: white;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      transform-origin: center;
+      will-change: transform, opacity;
+    }
+    #mobile-menu-toggle.active #bar1 {
+      transform: translateY(11px) rotate(45deg);
+    }
+    #mobile-menu-toggle.active #bar2 {
+      opacity: 0;
+    }
+    #mobile-menu-toggle.active #bar3 {
+      transform: translateY(-11px) rotate(-45deg);
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1050;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transform: translateY(-100%);
+      transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0);
+      outline: none;
+    }
+    .mobile-menu.active {
+      transform: translateY(0);
+    }
+    .mobile-menu a {
+      font-size: 1.8rem;
+      padding: 1rem 0;
+      color: white;
+      text-decoration: none;
+      width: 100%;
+      max-width: 300px;
+      text-align: center;
+      transition: color 0.3s ease;
+      user-select: none;
+    }
+    .mobile-menu a:hover,
+    .mobile-menu a:focus {
+      color: var(--neon-purple);
+      outline: none;
+    }
+
+    .mobile-menu-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      z-index: 1100;
+    }
+    .mobile-menu-close span {
+      position: absolute;
+      height: 3px;
+      width: 30px;
+      background: white;
+      top: 50%;
+      left: 0;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+    .mobile-menu-close span:first-child {
+      transform: translateY(-50%) rotate(45deg);
+    }
+    .mobile-menu-close span:last-child {
+      transform: translateY(-50%) rotate(-45deg);
+    }
+
+    /* Hero Section */
     .hero-section {
-      justify-content: flex-start;
-      padding-top: 60px;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 0 5%;
+      padding-top: 80px;
+      scroll-snap-align: start;
     }
+
     .hero-content {
-      height: 300px;
-      margin-top: 80px; /* aussi remonté en mobile */
+      position: relative;
+      max-width: 600px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 400px;
+      text-align: center;
+      margin-top: 60px; /* remonté halo + titre */
     }
+
     .prism-title {
-      font-size: 3.5rem;
-      white-space: normal;
+      font-size: 6.5rem;
+      font-weight: 700;
+      color: white;
+      line-height: 1;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+      white-space: nowrap;
     }
     .hero-subtitle {
-      font-size: 1.2rem;
-      max-width: 100%;
+      font-size: 1.5rem;
+      font-weight: 300;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      max-width: 500px;
     }
-    .neon-circle {
-      width: 250px;
-      height: 250px;
-      top: 46%;  /* remonté aussi sur mobile */
-    }
-  }
-</style>
 
+    .neon-circle {
+      position: absolute;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: transparent;
+      box-shadow: var(--neon-glow);
+      animation: pulse-breath 4s infinite ease-in-out;
+      z-index: 1;
+      user-select: none;
+    }
+    @keyframes pulse-breath {
+      0%, 100% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.05);
+      }
+    }
+
+    /* Sections */
+    section {
+      min-height: calc(100vh - 80px);
+      padding: 60px 5% 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      scroll-snap-align: start;
+      flex-direction: column;
+      text-align: center;
+    }
+    .content-hidden {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s ease;
+    }
+    .content-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    section#project,
+    section#about,
+    section#contact {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1e0d3f 100%);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      #mobile-menu-toggle {
+        display: flex;
+        position: relative;
+        z-index: 2000;
+      }
+      .hero-section {
+        justify-content: flex-start;
+        padding-top: 60px;
+      }
+      .hero-content {
+        height: 300px;
+        margin-top: 60px;
+      }
+      .prism-title {
+        font-size: 3.5rem;
+        white-space: normal;
+      }
+      .hero-subtitle {
+        font-size: 1.2rem;
+        max-width: 100%;
+      }
+      .neon-circle {
+        width: 250px;
+        height: 250px;
+        top: 46%;
+      }
+    }
+  </style>
 </head>
 <body>
   <nav>
-    <div class="logo">PRISM</div>
+    <div class="logo" tabindex="0">PRISM</div>
     <div class="nav-links">
-      <a href="#home">Accueil</a>
-      <a href="#project">Notre projet</a>
-      <a href="#about">À propos</a>
-      <a href="#contact">Nous contacter</a>
+      <a href="#home" tabindex="0">Accueil</a>
+      <a href="#project" tabindex="0">Notre projet</a>
+      <a href="#about" tabindex="0">À propos</a>
+      <a href="#contact" tabindex="0">Nous contacter</a>
     </div>
-    <button id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+    <button id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu" aria-haspopup="true" tabindex="0">
       <span id="bar1"></span>
       <span id="bar2"></span>
       <span id="bar3"></span>
     </button>
   </nav>
 
-  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true" tabindex="-1">
     <div class="mobile-menu-close" id="mobile-menu-close" role="button" tabindex="0" aria-label="Fermer le menu">
       <span></span>
       <span></span>
     </div>
-    <a href="#home">Accueil</a>
-    <a href="#project">Notre projet</a>
-    <a href="#about">À propos</a>
-    <a href="#contact">Nous contacter</a>
+    <a href="#home" tabindex="0">Accueil</a>
+    <a href="#project" tabindex="0">Notre projet</a>
+    <a href="#about" tabindex="0">À propos</a>
+    <a href="#contact" tabindex="0">Nous contacter</a>
   </div>
 
   <section id="home" class="hero-section">
     <div class="hero-content content-hidden">
-      <div class="neon-circle"></div>
+      <div class="neon-circle" aria-hidden="true"></div>
       <h1 class="prism-title">PRISM</h1>
       <p class="hero-subtitle">Bien plus qu'une IA...</p>
     </div>
   </section>
 
   <section id="project" class="content-hidden">
-    <div class="max-w-6xl mx-auto">
+    <div class="max-w-6xl mx-auto" style="max-width: 1200px; padding: 0 1rem;">
       <h2>Notre projet</h2>
       <p>PRISM est une plateforme révolutionnaire qui fusionne intelligence artificielle et design immersif pour créer des expériences uniques.</p>
     </div>
   </section>
 
   <section id="about" class="content-hidden">
-    <div class="max-w-6xl mx-auto">
+    <div class="max-w-6xl mx-auto" style="max-width: 1200px; padding: 0 1rem;">
       <h2>À propos</h2>
       <p>Une équipe passionnée dédiée à repousser les limites de la technologie et du design.</p>
     </div>
   </section>
 
   <section id="contact" class="content-hidden">
-    <div class="max-w-6xl mx-auto">
+    <div class="max-w-6xl mx-auto" style="max-width: 1200px; padding: 0 1rem;">
       <h2>Nous contacter</h2>
       <p>Prêt à transformer votre vision en réalité? Contactez-nous dès aujourd'hui.<br />
       <span style="color:#bb86fc;">prism.ai.contact@gmail.com</span></p>
@@ -324,7 +359,7 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Intersection observer for animations
+      // Intersection observer for content fade-in
       const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -345,6 +380,7 @@
         mobileMenu.classList.add('active');
         mobileMenu.setAttribute('aria-hidden', 'false');
         document.body.classList.add('no-scroll');
+        mobileMenu.focus();
       }
 
       function closeMenu() {
@@ -353,6 +389,7 @@
         mobileMenu.classList.remove('active');
         mobileMenu.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('no-scroll');
+        toggleBtn.focus();
       }
 
       toggleBtn.addEventListener('click', () => {
