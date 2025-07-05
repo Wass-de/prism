@@ -4,294 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PRISM - Bien plus qu'une IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --neon-purple: rgba(187, 134, 252, 0.8);
-      --neon-glow: 0 0 10px rgba(187, 134, 252, 0.8), 
-                   0 0 20px rgba(187, 134, 252, 0.6),
-                   0 0 30px rgba(187, 134, 252, 0.4);
-    }
-
-    body {
-      font-family: 'Montserrat', sans-serif;
-      margin: 0; padding: 0;
-      background-color: #0a0a0a;
-      color: white;
-      overflow-x: hidden;
-    }
-    body.no-scroll {
-      overflow: hidden;
-    }
-
-    .nav-transparent {
-      background-color: rgba(10,10,10,0.5);
-      backdrop-filter: blur(10px);
-      position: fixed;
-      width: 100%;
-      z-index: 1000;
-    }
-
-    .nav-item {
-      transition: all 0.3s ease;
-      position: relative;
-      cursor: pointer;
-    }
-    .nav-item::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 50%;
-      transform: translateX(-50%);
-      width: 0;
-      height: 2px;
-      background: var(--neon-purple);
-      transition: width 0.3s ease;
-    }
-    .nav-item:hover::after {
-      width: 80%;
-    }
-
-    #mobile-menu-toggle {
-      cursor: pointer;
-      width: 30px;
-      height: 25px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      z-index: 1100;
-    }
-    #mobile-menu-toggle span {
-      display: block;
-      height: 3px;
-      background: white !important;
-      border-radius: 2px;
-      transition: all 0.3s ease;
-      z-index: 9999;
-    }
-    #mobile-menu-toggle.active #bar1 {
-      transform: translateY(11px) rotate(45deg);
-    }
-    #mobile-menu-toggle.active #bar2 {
-      opacity: 0;
-    }
-    #mobile-menu-toggle.active #bar3 {
-      transform: translateY(-11px) rotate(-45deg);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-    }
-
-    .hero-section {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-      padding: 0 5%;
-      padding-top: 80px;
-    }
-    .hero-content {
-      position: relative;
-      max-width: 600px;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 400px;
-      text-align: center;
-    }
-    /* Remontée halo + titre + phrase sur desktop */
-    .neon-circle {
-      position: absolute;
-      top: 48%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 400px;
-      height: 400px;
-      border-radius: 50%;
-      background: transparent;
-      box-shadow: var(--neon-glow);
-      animation: pulse-breath 4s infinite ease-in-out;
-      z-index: 1;
-    }
-    .prism-title {
-      font-size: 6.5rem;
-      font-weight: 700;
-      color: white;
-      line-height: 1;
-      margin-bottom: 1rem;
-      text-shadow: 0 0 10px rgba(255,255,255,0.3);
-      white-space: nowrap;
-      margin-top: -20px;
-    }
-    .hero-subtitle {
-      font-size: 1.5rem;
-      font-weight: 300;
-      margin-bottom: 2rem;
-      opacity: 0.9;
-      max-width: 500px;
-      margin-top: -10px;
-    }
-
-    @keyframes pulse-breath {
-      0%, 100% {
-        opacity: 0.7;
-        transform: translate(-50%, -50%) scale(1);
-      }
-      50% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.05);
-      }
-    }
-
-    section {
-      min-height: calc(100vh - 80px);
-      padding: 60px 5% 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      scroll-snap-align: start;
-      flex-direction: column;
-      text-align: center;
-    }
-    .content-hidden {
-      opacity: 0;
-      transform: translateY(50px);
-      transition: all 0.8s ease;
-    }
-    .content-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    section#project,
-    section#about,
-    section#contact {
-      background: linear-gradient(135deg, #0a0a0a 0%, #1e0d3f 100%);
-    }
-
-    .mobile-menu {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100vh;
-      background: rgba(10, 10, 10, 0.95);
-      backdrop-filter: blur(10px);
-      z-index: 1050;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      transform: translateY(-100%);
-      transition: transform 0.4s cubic-bezier(0.77,0.2,0.05,1.0);
-    }
-    .mobile-menu.active {
-      transform: translateY(0);
-    }
-    .mobile-menu a {
-      display: block;
-      font-size: 1.8rem;
-      padding: 1rem 0;
-      color: white;
-      text-decoration: none;
-      transition: color 0.3s ease;
-      width: 100%;
-      max-width: 300px;
-    }
-    .mobile-menu a:hover {
-      color: var(--neon-purple);
-    }
-
-    .mobile-menu-close {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 30px;
-      height: 30px;
-      cursor: pointer;
-      z-index: 1100;
-    }
-    .mobile-menu-close span {
-      position: absolute;
-      height: 3px;
-      width: 30px;
-      background: white;
-      top: 50%;
-      left: 0;
-      border-radius: 2px;
-      transition: all 0.3s ease;
-    }
-    .mobile-menu-close span:first-child {
-      transform: translateY(-50%) rotate(45deg);
-    }
-    .mobile-menu-close span:last-child {
-      transform: translateY(-50%) rotate(-45deg);
-    }
-
-    #mobile-menu-toggle {
-      display: none;
-    }
-
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-      }
-      #mobile-menu-toggle {
-        display: flex;
-        width: 35px;       /* un peu plus large */
-        height: 28px;      /* un peu plus haut */
-        background: transparent;
-        z-index: 1200;     /* au-dessus de tout */
-      }
-      #mobile-menu-toggle span {
-        background: white; /* bien blanc */
-        height: 4px;       /* un peu plus épais */
-        border-radius: 2px;
-      }
-      .hero-section {
-        padding-top: 60px;
-      }
-      .hero-content {
-        height: 300px;
-        max-width: 90%;
-      }
-      /* Remonter halo, titre et phrase pour centrage vertical */
-      .neon-circle {
-        width: 250px;
-        height: 250px;
-        top: 50%;         /* remonter de 5% */
-      }
-      .prism-title {
-        font-size: 3.5rem;
-        white-space: normal;
-        margin-top: 0;     /* remonter légèrement */
-      }
-      .hero-subtitle {
-        font-size: 1.2rem;
-        max-width: 100%;
-        margin-top: 10px;  /* un peu moins bas */
-      }
-      nav {
-        padding: 0.75rem 1rem;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <nav class="nav-transparent py-4 px-6 sm:px-12">
+  <nav class="nav-transparent py-4 px-6 sm:px-12" role="navigation" aria-label="Menu principal">
     <div class="flex justify-between items-center max-w-6xl mx-auto">
-      <div class="text-2xl font-bold">PRISM</div>
-      <div class="nav-links">
-        <a href="#home" class="nav-item">Accueil</a>
-        <a href="#project" class="nav-item">Notre projet</a>
-        <a href="#about" class="nav-item">À propos</a>
-        <a href="#contact" class="nav-item">Nous contacter</a>
-      </div>
-      <button id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+      <div class="text-2xl font-bold" tabindex="0">PRISM</div>
+      <ul class="nav-links" role="menubar">
+        <li class="nav-item" role="none">
+          <a href="#home" class="nav-link" role="menuitem" aria-current="page" tabindex="0">Accueil</a>
+        </li>
+        <li class="nav-item group" role="none" tabindex="0" aria-haspopup="true" aria-expanded="false">
+          <a href="#project" class="nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false" tabindex="-1">Notre projet ▾</a>
+          <ul class="submenu" role="menu" aria-label="Sous-menu Notre projet">
+            <li role="none"><a href="#feature1" class="submenu-link" role="menuitem" tabindex="-1">Fonctionnalités</a></li>
+            <li role="none"><a href="#feature2" class="submenu-link" role="menuitem" tabindex="-1">Technologie</a></li>
+            <li role="none"><a href="#feature3" class="submenu-link" role="menuitem" tabindex="-1">Avantages</a></li>
+          </ul>
+        </li>
+        <li class="nav-item" role="none">
+          <a href="#about" class="nav-link" role="menuitem" tabindex="0">À propos</a>
+        </li>
+        <li class="nav-item" role="none">
+          <a href="#contact" class="nav-link" role="menuitem" tabindex="0">Nous contacter</a>
+        </li>
+      </ul>
+      <button id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu" aria-haspopup="true" aria-pressed="false" role="button">
         <span id="bar1"></span>
         <span id="bar2"></span>
         <span id="bar3"></span>
@@ -299,35 +39,48 @@
     </div>
   </nav>
 
-  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Menu mobile">
     <div class="mobile-menu-close" id="mobile-menu-close" role="button" tabindex="0" aria-label="Fermer le menu">
       <span></span>
       <span></span>
     </div>
-    <a href="#home">Accueil</a>
-    <a href="#project">Notre projet</a>
-    <a href="#about">À propos</a>
-    <a href="#contact">Nous contacter</a>
+    <a href="#home" tabindex="0">Accueil</a>
+    <a href="#project" tabindex="0">Notre projet</a>
+    <a href="#about" tabindex="0">À propos</a>
+    <a href="#contact" tabindex="0">Nous contacter</a>
   </div>
 
   <section id="home" class="hero-section">
-    <div class="hero-content content-hidden">
+    <canvas id="particle-canvas" aria-hidden="true" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:0;"></canvas>
+    <div class="hero-content content-hidden" role="region" aria-label="Introduction PRISM">
       <div class="neon-circle"></div>
       <h1 class="prism-title">PRISM</h1>
       <p class="hero-subtitle">Bien plus qu'une IA...</p>
     </div>
   </section>
 
-  <section id="project" class="content-hidden">
+  <section id="project" class="content-hidden" tabindex="0" aria-label="Notre projet">
     <div class="max-w-6xl mx-auto">
       <h2 class="text-4xl font-bold mb-8">Notre projet</h2>
       <p class="text-xl opacity-90 max-w-3xl mx-auto">
         PRISM est une plateforme révolutionnaire qui fusionne intelligence artificielle et design immersif pour créer des expériences uniques.
       </p>
+      <section id="feature1" tabindex="0" aria-label="Fonctionnalités">
+        <h3 class="text-2xl font-semibold mt-8 mb-4">Fonctionnalités</h3>
+        <p>Des outils avancés pour une expérience utilisateur sans égal.</p>
+      </section>
+      <section id="feature2" tabindex="0" aria-label="Technologie">
+        <h3 class="text-2xl font-semibold mt-8 mb-4">Technologie</h3>
+        <p>Utilisation des dernières avancées en IA et design 3D.</p>
+      </section>
+      <section id="feature3" tabindex="0" aria-label="Avantages">
+        <h3 class="text-2xl font-semibold mt-8 mb-4">Avantages</h3>
+        <p>Une solution complète et personnalisable adaptée à vos besoins.</p>
+      </section>
     </div>
   </section>
 
-  <section id="about" class="content-hidden">
+  <section id="about" class="content-hidden" tabindex="0" aria-label="À propos">
     <div class="max-w-6xl mx-auto">
       <h2 class="text-4xl font-bold mb-8">À propos</h2>
       <p class="text-xl opacity-90 max-w-3xl mx-auto">
@@ -336,86 +89,23 @@
     </div>
   </section>
 
-  <section id="contact" class="content-hidden">
+  <section id="contact" class="content-hidden" tabindex="0" aria-label="Nous contacter">
     <div class="max-w-6xl mx-auto">
       <h2 class="text-4xl font-bold mb-8">Nous contacter</h2>
       <p class="text-xl opacity-90 max-w-3xl mx-auto mb-8">
         Prêt à transformer votre vision en réalité? Contactez-nous dès aujourd'hui.<br />
-        <span class="text-purple-400">prism.ai.contact@gmail.com</span>
+        <span style="color: var(--neon-color);">prism.ai.contact@gmail.com</span>
       </p>
     </div>
   </section>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('content-visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1 });
-      document.querySelectorAll('.content-hidden').forEach(el => observer.observe(el));
+  <!-- Bouton retour en haut -->
+  <button id="back-to-top" aria-label="Retour en haut" title="Retour en haut">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" focusable="false">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+    </svg>
+  </button>
 
-      const toggleBtn = document.getElementById('mobile-menu-toggle');
-      const mobileMenu = document.getElementById('mobile-menu');
-      const closeBtn = document.getElementById('mobile-menu-close');
-
-      function openMenu() {
-        toggleBtn.setAttribute('aria-expanded', 'true');
-        toggleBtn.classList.add('active');
-        mobileMenu.classList.add('active');
-        mobileMenu.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('no-scroll');
-      }
-
-      function closeMenu() {
-        toggleBtn.setAttribute('aria-expanded', 'false');
-        toggleBtn.classList.remove('active');
-        mobileMenu.classList.remove('active');
-        mobileMenu.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('no-scroll');
-      }
-
-      toggleBtn.addEventListener('click', () => {
-        if (mobileMenu.classList.contains('active')) {
-          closeMenu();
-        } else {
-          openMenu();
-        }
-      });
-
-      closeBtn.addEventListener('click', closeMenu);
-      closeBtn.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          closeMenu();
-        }
-      });
-
-      mobileMenu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', closeMenu);
-      });
-
-      document.addEventListener('click', e => {
-        if (mobileMenu.classList.contains('active') &&
-            !mobileMenu.contains(e.target) &&
-            !toggleBtn.contains(e.target)) {
-          closeMenu();
-        }
-      });
-
-      document.querySelectorAll('nav a, .mobile-menu a').forEach(anchor => {
-        anchor.addEventListener('click', e => {
-          e.preventDefault();
-          const target = document.querySelector(anchor.getAttribute('href'));
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
-          }
-        });
-      });
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
